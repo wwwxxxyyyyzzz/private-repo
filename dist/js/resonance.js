@@ -12,11 +12,18 @@ uniform vec4 u_pointer;
 uniform vec4 u_trails[4];
 uniform float u_opacity;
 uniform float u_reduced;
+uniform vec4 u_audio;
+uniform float u_detail;
+varying float v_seed;
 varying float v_alpha;
 void main() {
   vec2 anchor = a_particle.xy;
   float seed = a_particle.z;
-  vec2 p = anchor + vec2(seed-.5,fract(seed*29.1)-.5)*u_drift*(1.0-u_reduced);
+  vec2 centered=anchor-u_resolution*.5;
+  vec2 p=centered*(1.0+u_audio.x*.10)+u_resolution*.5;
+  p+=vec2(seed-.5,fract(seed*29.1)-.5)*u_drift*(1.0+u_audio.x*8.0+u_audio.y*3.0)*(1.0-u_reduced);
+  p+=centered*(seed-.5)*u_audio.z*.07;
+  v_seed=seed;
   if(u_pointer.z>0.001){
     vec2 delta=p-u_pointer.xy;
     float d2=dot(delta,delta);
@@ -40,14 +47,17 @@ void main() {
     }
   }
   gl_Position = vec4(p/u_resolution*vec2(2.0,-2.0)+vec2(-1.0,1.0),0.0,1.0);
-  gl_PointSize = (1.25+seed*.75)*u_dpr;
+  gl_PointSize = (1.25+seed*.75)*u_dpr*u_detail*(1.0+u_audio.w*.8);
   v_alpha = a_particle.w*u_opacity;
 }`;
 const fragmentSource = `
 precision mediump float;
 uniform vec3 u_color;
+uniform float u_density;
+varying float v_seed;
 varying float v_alpha;
 void main() {
+  if(v_seed>u_density) discard;
   float edge = 1.0-smoothstep(.35,.53,length(gl_PointCoord-.5));
   gl_FragColor = vec4(u_color,v_alpha*edge);
 }`;
@@ -73,7 +83,7 @@ function hasHardwareGPU(){
 export class ResonanceField {
   constructor(canvas,{color,complexity=4.5,opacity=1,interactive=true}={}) {
     this.canvas=canvas;this.color=color||getComputedStyle(document.documentElement).getPropertyValue('--particle').trim();
-    this.complexity=complexity;this.opacity=opacity;this.phase=0;
+    this.complexity=complexity;this.opacity=opacity;this.phase=0;this.distortion=.65;this.density=1;this.detail=1;this.response=1;this.audio={rms:0,low:0,mid:0,high:0};this.audioLevel=0;
     this.pointer={x:-1000,y:-1000,down:false,active:false};
     this.strength=0;this.radius=motion.radius;this.trails=new Float32Array(16);
     this.lastTrail=0;this.trailIndex=0;this.visible=false;this.raf=0;this.lastFrame=0;
@@ -102,7 +112,7 @@ export class ResonanceField {
     if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));
     gl.deleteShader(vs);gl.deleteShader(fs);gl.useProgram(this.program);
     this.buffer=gl.createBuffer();this.uniforms={};
-    for(const n of ['resolution','dpr','drift','pointer','trails[0]','opacity','reduced','color'])this.uniforms[n]=gl.getUniformLocation(this.program,'u_'+n);
+    for(const n of ['resolution','dpr','drift','pointer','trails[0]','opacity','reduced','color','audio','detail','density'])this.uniforms[n]=gl.getUniformLocation(this.program,'u_'+n);
     this.attribute=gl.getAttribLocation(this.program,'a_particle');
     gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.disable(gl.DEPTH_TEST);
   }
@@ -117,7 +127,7 @@ export class ResonanceField {
     if(!this.w||this.lost)return;
     const particles=[],a=this.complexity,cols=Math.ceil(this.w/12)+2,rows=Math.ceil(this.h/12)+2,grid=new Float32Array(cols*rows);
     for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
-      const nx=col*12/this.w*6.28,ny=row*12/this.h*6.28,warp=Math.sin(ny*1.4+nx*.6)*.65;
+      const nx=col*12/this.w*6.28,ny=row*12/this.h*6.28,warp=Math.sin(ny*1.4+nx*.6)*this.distortion;
       grid[row*cols+col]=Math.sin((nx+warp)*a*.47+this.phase)*Math.cos(ny*a*.37+Math.sin(nx*.9)*.65)+Math.cos(nx*a*.39-ny*.8)*Math.sin(ny*a*.43+warp+this.phase);
     }
     let seed=17;const rnd=()=>{seed=seed*16807%2147483647;return(seed-1)/2147483646};
@@ -133,6 +143,18 @@ export class ResonanceField {
     this.draw();
   }
   setComplexity(n){this.complexity=n;cancelAnimationFrame(this.rebuildFrame);this.rebuildFrame=requestAnimationFrame(()=>this.rebuild())}
+  setAudio(metrics){this.audio=metrics;}
+  setSettings(settings){
+    let rebuild=false;
+    for(const key of ['complexity','distortion','density','detail','response'])if(Number.isFinite(settings[key])){
+      if((key==='complexity'||key==='distortion')&&this[key]!==settings[key])rebuild=true;
+      this[key]=settings[key];
+    }
+    if(rebuild){cancelAnimationFrame(this.rebuildFrame);this.rebuildFrame=requestAnimationFrame(()=>this.rebuild())}else this.draw();
+  }
+  setColor(color){this.color=color;this.rgb=null;this.draw();}
+  settings(){return {complexity:this.complexity,distortion:this.distortion,density:this.density,detail:this.detail,response:this.response,color:this.color,phase:this.phase};}
+  pulse(e){this.move(e);this.pointer.down=true;clearTimeout(this.pulseTimer);this.pulseTimer=setTimeout(()=>this.leave(),350);}
   move(e){
     const r=this.canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
     this.pointer.x=x;this.pointer.y=y;this.pointer.active=true;
@@ -153,24 +175,30 @@ export class ResonanceField {
     this.strength+=(target-this.strength)*(1-Math.exp(-dt*(target?13:3.2)));
     this.radius+=((this.pointer.down?235:motion.radius)-this.radius)*(1-Math.exp(-dt*10));
     const t=this.reduced.matches?0:time/1000;
+    this.audioLevel+=(Math.min(1,this.audio.rms*5)*this.response-this.audioLevel)*(1-Math.exp(-dt*14));
+    const level=this.audioLevel,low=this.audio.low*this.response,mid=this.audio.mid*this.response,high=this.audio.high*this.response;
     this.trailUniforms||=new Float32Array(16);
     for(let i=0;i<16;i+=4){this.trailUniforms[i]=this.trails[i];this.trailUniforms[i+1]=this.trails[i+1];this.trailUniforms[i+3]=this.reduced.matches?0:Math.exp(-Math.max(0,t-this.trails[i+2])*2.6)*this.trails[i+3];}
     if(this.gl){
       const gl=this.gl,u=this.uniforms;gl.viewport(0,0,this.canvas.width,this.canvas.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(this.program);
       gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.enableVertexAttribArray(this.attribute);gl.vertexAttribPointer(this.attribute,4,gl.FLOAT,false,16,0);
       gl.uniform2f(u.resolution,this.w,this.h);gl.uniform1f(u.dpr,this.dpr);gl.uniform2f(u.drift,Math.sin(t*.28)*8,Math.cos(t*.23)*8);gl.uniform1f(u.opacity,this.opacity);gl.uniform1f(u.reduced,this.reduced.matches?1:0);
+      gl.uniform4f(u.audio,level,low,mid,high);gl.uniform1f(u.detail,this.detail);gl.uniform1f(u.density,this.density);
       gl.uniform4f(u.pointer,this.pointer.x,this.pointer.y,this.strength,this.radius);gl.uniform4fv(u['trails[0]'],this.trailUniforms);
       this.rgb||=colorRGB(this.color);gl.uniform3fv(u.color,this.rgb);gl.drawArrays(gl.POINTS,0,this.count);
     }else{
       // Lightweight fallback draws only preselected grains; never scans the full field per frame.
+      const driftX=Math.sin(t*.7)*(level*60+low*12),driftY=Math.cos(t*.8)*(level*60+mid*12);
       const c=this.ctx,p=this.particles;c.clearRect(0,0,this.w,this.h);c.fillStyle=this.color;c.globalAlpha=.85*this.opacity;
-      for(let i=0;i<p.length;i+=4){let x=p[i],y=p[i+1];const dx=x-this.pointer.x,dy=y-this.pointer.y,d2=dx*dx+dy*dy;
+      for(let i=0;i<p.length;i+=4){if(p[i+2]>this.density)continue;
+        let x=(p[i]-this.w/2)*(1+level*.1)+this.w/2,y=(p[i+1]-this.h/2)*(1+level*.1)+this.h/2;
+        if(!this.reduced.matches&&level>.001){x+=(p[i+2]-.5)*driftX;y+=((p[i+2]*29.1)%1-.5)*driftY;}const dx=x-this.pointer.x,dy=y-this.pointer.y,d2=dx*dx+dy*dy;
         if(this.strength>.001&&d2<this.radius*this.radius&&d2>.01){
           const d=Math.sqrt(d2),reach=1-d/this.radius,influence=reach*reach*this.strength,seed=p[i+2],push=influence*(145+seed*140);
           x+=dx/d*push+((seed*73.1)%1-.5)*influence*100;
           y+=dy/d*push+((seed*97.3)%1-.5)*influence*100;
         }
-        const size=2.0+p[i+2]*.7;c.fillRect(x,y,size,size);
+        const size=(2.0+p[i+2]*.7)*this.detail*(1+high*.8);c.fillRect(x,y,size,size);
       }c.globalAlpha=1;
     }
   }
