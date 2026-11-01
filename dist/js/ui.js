@@ -1,10 +1,12 @@
-import {sound} from './audio.js?v=4';
-import {species} from './data.js?v=4';
-import {readCollection} from './store.js?v=4';
+import {installMotion} from './motion.js?v=5';
+import {sound} from './audio.js?v=5';
+import {species} from './data.js?v=5';
+import {readCollection} from './store.js?v=5';
 let toastTimer;
 export function notify(message){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.append(el)}el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3800)}
 export function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 export function installShell(){
+ installMotion();
  const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('.nav');
  menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',open);menu.setAttribute('aria-label',open?'收起导航':'展开导航');nav.classList.toggle('open',open)});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav?.classList.contains('open')){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.focus()}});

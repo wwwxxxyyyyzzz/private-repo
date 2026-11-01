@@ -1,5 +1,5 @@
-import {installShell,notify,downloadBlob} from './ui.js?v=4';
-import {readCollection,removeImpression,safeText,dateLabel} from './store.js?v=4';
+import {installShell,notify,downloadBlob} from './ui.js?v=5';
+import {readCollection,removeImpression,safeText,dateLabel} from './store.js?v=5';
 installShell();const $=s=>document.querySelector(s);let removing=null,mapVersion=0;
 function safeImage(value){return /^data:image\/(webp|png);base64,/.test(value||'')?value:'assets/pattern.webp'}
 async function render(){

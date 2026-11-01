@@ -31,3 +31,13 @@ Impressions contain source label, timestamp, visual snapshot and render settings
 ## Navigation
 
 All six pages are actual static HTML documents with direct URLs. Mobile navigation supports keyboard Escape. Native view transitions reveal incoming pages when supported; reduced motion uses instant navigation.
+
+## GSAP, Lenis and fine-grain rendering
+
+GSAP 3.15.0 with SplitText and ScrollTrigger drives the hero's staggered character rise, section-line reveals, story-text changes and small navigation/button feedback. The introductory headline settles in about one second. Content exists as readable HTML and is not gated behind a loading screen. Font readiness precedes splitting, splits are reverted on reduced-motion changes, and animations clean up on navigation.
+
+Lenis 1.3.27 is driven by a single named GSAP ticker callback; `autoRaf` is false. Touch keeps native scrolling, anchors use the same scroll driver, dialogs retain native inner scrolling, and the library's reduced-motion handling is enabled. Browser-back restoration restarts the existing instance rather than creating a second driver.
+
+Hardware WebGL draws precomputed anchors with a small seeded grain atlas in one call. The Canvas fallback caches the dense background texture, stops scheduling when idle, and only redraws budgeted local grains near the pointer. Audio applies lightweight scale/position modulation to that cached field. Both renderers keep strong scatter/return, PNG export and the existing controls.
+
+Validation covered 360, 390, 768 and 1440 px, complete archive/upload/export/collection workflows, anchors and story steps, reduced motion, real font loading and full headline bounds. On this test environment, concurrent audio analysis and pointer scatter measured roughly 16.7 ms median / 17.2 ms p95 frame intervals. Actual device performance may vary.

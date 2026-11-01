@@ -1,9 +1,9 @@
-import {species,getSpecies} from './data.js?v=4';
-import {sound,timeLabel} from './audio.js?v=4';
-import {ResonanceField} from './resonance.js?v=4';
-import {installShell,notify} from './ui.js?v=4';
-import {readCollection,saveImpression} from './store.js?v=4';
-import {exportPNG,exportSVG,patternSnapshot} from './export.js?v=4';
+import {species,getSpecies} from './data.js?v=5';
+import {sound,timeLabel} from './audio.js?v=5';
+import {ResonanceField} from './resonance.js?v=5';
+import {installShell,notify} from './ui.js?v=5';
+import {readCollection,saveImpression} from './store.js?v=5';
+import {exportPNG,exportSVG,patternSnapshot} from './export.js?v=5';
 installShell();const $=s=>document.querySelector(s),field=new ResonanceField($('#studio-field'));
 let sourceSpecies=null,job=0,lastMeters=0;
 const controls=[['node-complexity','complexity','complexity-output',n=>n.toFixed(1)],['organic-distortion','distortion','distortion-output',n=>Math.round(n*100)+'%'],['particle-density','density','density-output',n=>Math.round(n*100)+'%'],['line-detail','detail','detail-output',n=>n.toFixed(1)],['audio-response','response','response-output',n=>n.toFixed(1)]];

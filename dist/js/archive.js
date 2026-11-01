@@ -1,9 +1,10 @@
-import {species,getSpecies} from './data.js?v=4';
-import {sound,timeLabel} from './audio.js?v=4';
-import {installShell,notify} from './ui.js?v=4';
-import {ResonanceField} from './resonance.js?v=4';
-import {saveImpression} from './store.js?v=4';
-import {patternSnapshot} from './export.js?v=4';
+import {revealElement} from './motion.js?v=5';
+import {species,getSpecies} from './data.js?v=5';
+import {sound,timeLabel} from './audio.js?v=5';
+import {installShell,notify} from './ui.js?v=5';
+import {ResonanceField} from './resonance.js?v=5';
+import {saveImpression} from './store.js?v=5';
+import {patternSnapshot} from './export.js?v=5';
 installShell();
 const $=s=>document.querySelector(s),grid=$('#archive-grid');
 const field=new ResonanceField($('#archive-field'),{complexity:3.8});
@@ -20,7 +21,7 @@ async function select(s){
   $('#player-image').src=s.image;$('#player-image').alt=s.name+'参考摄影';$('#player-name').textContent=s.name;$('#player-story').textContent=s.story;$('#open-in-lab').href='lab.html?sound='+s.id;
   $('#collect-sound').disabled=true;$('#collect-sound').textContent='听完这段声音，解锁声音印记 ✧';
   await sound.demo(s);if(version!==selectionVersion)return;await sound.play();
-  $('.archive-player').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});
+  revealElement($('.archive-player'),{center:true});
  }catch(e){notify(e.message)}
 }
 grid.addEventListener('click',e=>{const play=e.target.closest('[data-play]'),info=e.target.closest('[data-detail]');if(play)select(getSpecies(play.dataset.play));if(info){detail=getSpecies(info.dataset.detail);$('#detail-image').src=detail.image;$('#detail-image').alt=detail.name;$('#detail-name').textContent=detail.name;$('#detail-description').textContent=detail.description;$('#detail-category').textContent=detail.en.toUpperCase()+' / '+detail.category;$('#species-detail').showModal()}});

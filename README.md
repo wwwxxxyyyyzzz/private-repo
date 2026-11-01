@@ -42,3 +42,11 @@ All bundled audio is explicitly labeled synthetic demo audio, generated in the b
 ## Verification
 
 Browser checks cover all six desktop and mobile pages, no horizontal overflow, dialogs/navigation, search/filtering, audio playback and completion, uploaded WAV analysis, parameter changes, PNG/transparent PNG/SVG downloads, collection persistence/restoration/deletion, map export, reduced motion and both WebGL and Canvas rendering paths. The original particle performance and stronger pointer dispersion are preserved.
+
+## Visual and motion upgrade
+
+Locally hosted Syne and subset Noto Serif SC add a consistent display hierarchy. `polish.css` contains the type system and reading-size refinements. `motion.js` uses the vendored GSAP/SplitText/ScrollTrigger and Lenis files to coordinate one smooth-scroll clock, bounded intro/section text motion and reduced-motion cleanup. Native touch scrolling is preserved.
+
+The resonance renderer now uses a seeded micrograin atlas. Software rendering reuses a cached field and only draws local scatter, while hardware rendering samples the atlas in the existing point draw. Textured density replaces brute-force particle count growth.
+
+Vendor versions, sources and notices are recorded in `dist/vendor/`. Typeface OFL notices are in `dist/assets/fonts/`. React Bits Noise/SplitText provided implementation references; their behavior was adapted to the existing vanilla-JavaScript site without a React migration.
