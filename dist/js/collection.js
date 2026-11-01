@@ -1,5 +1,5 @@
-import {installShell,notify,downloadBlob} from './ui.js?v=7';
-import {readCollection,removeImpression,safeText,dateLabel} from './store.js?v=7';
+import {installShell,notify,downloadBlob} from './ui.js?v=8';
+import {readCollection,removeImpression,safeText,dateLabel} from './store.js?v=8';
 installShell();const $=s=>document.querySelector(s);let removing=null,mapVersion=0;
 function safeImage(value){return /^data:image\/(webp|png);base64,/.test(value||'')?value:'assets/pattern.webp'}
 async function render(){
@@ -7,7 +7,7 @@ async function render(){
  $('#collection-grid').innerHTML=items.map(item=>`<article class="impression-card"><img src="${safeImage(item.image)}" alt="${safeText(item.name)}的声纹印记"><div class="impression-info"><h2>${safeText(item.name)}</h2><div class="impression-meta"><span>${safeText(item.source)}</span><time datetime="${safeText(item.date)}">${dateLabel(item.date)}</time></div><div class="impression-actions"><a href="lab.html?impression=${encodeURIComponent(item.id)}">再次共振 ↗</a><button data-download="${safeText(item.id)}">导出 ↗</button><button class="delete-impression" data-delete="${safeText(item.id)}" aria-label="移除${safeText(item.name)}印记">移除</button></div></div></article>`).join('');
  if(items.length)await drawMap(items);
 }
-$('#collection-grid').addEventListener('click',e=>{const remove=e.target.closest('[data-delete]'),download=e.target.closest('[data-download]');if(remove){removing=remove.dataset.delete;$('#delete-confirm').showModal()}if(download){const item=readCollection().find(x=>x.id===download.dataset.download);if(!item)return;const a=document.createElement('a');a.href=safeImage(item.image);a.download='RMS-sound-impression.webp';a.click()}});
+$('#collection-grid').addEventListener('click',e=>{const remove=e.target.closest('[data-delete]'),download=e.target.closest('[data-download]');if(remove){removing=remove.dataset.delete;$('#delete-confirm').showModal()}if(download){const item=readCollection().find(x=>x.id===download.dataset.download);if(!item)return;const a=document.createElement('a');a.href=safeImage(item.image);a.download=safeImage(item.image).startsWith('data:image/png')?'RMS-sound-impression.png':'RMS-sound-impression.webp';a.click()}});
 $('#cancel-delete').addEventListener('click',()=>$('#delete-confirm').close());$('#confirm-delete').addEventListener('click',()=>{try{removeImpression(removing);$('#delete-confirm').close();notify('声音印记已移除')}catch{notify('无法更新本地收藏，请检查浏览器设置')}});
 async function drawMap(items){
  const version=++mapVersion,canvas=$('#map-canvas'),c=canvas.getContext('2d'),style=getComputedStyle(document.documentElement),bg=style.getPropertyValue('--bg').trim(),accent=style.getPropertyValue('--accent').trim();

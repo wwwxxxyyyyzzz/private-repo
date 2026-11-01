@@ -1,8 +1,8 @@
-import {scrollToPosition} from './motion.js?v=7';
-import {installShell,notify} from './ui.js?v=7';
-import {sound} from './audio.js?v=7';
+import {scrollToPosition} from './motion.js?v=8';
+import {installShell,notify} from './ui.js?v=8';
+import {sound} from './audio.js?v=8';
 installShell();
-import{ResonanceField,titleParticles}from'./resonance.js?v=7';
+import{ResonanceField,titleParticles}from'./resonance.js?v=8';
 const $=s=>document.querySelector(s);
 const rootStyle=getComputedStyle(document.documentElement);
 const hero=new ResonanceField($('#hero-field'),{complexity:3.8,opacity:.7});

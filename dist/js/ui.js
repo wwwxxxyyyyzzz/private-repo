@@ -1,7 +1,7 @@
-import {installMotion} from './motion.js?v=7';
-import {sound} from './audio.js?v=7';
-import {species} from './data.js?v=7';
-import {readCollection} from './store.js?v=7';
+import {installMotion} from './motion.js?v=8';
+import {sound} from './audio.js?v=8';
+import {species} from './data.js?v=8';
+import {readCollection} from './store.js?v=8';
 let toastTimer;
 export function notify(message){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');document.body.append(el)}el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3800)}
 export function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
