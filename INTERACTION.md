@@ -18,7 +18,7 @@ Search and category filters operate together. Hover never plays sound. Each entr
 
 ## Lab
 
-Select a demo, or upload/drop a supported local audio file. Play initiates analysis. Five sliders adjust node complexity, organic distortion, grain density, grain detail and audio response. The five PDF palette colors are selectable. Pointer/touch manipulation and double-click pulse act on the canvas. PNG exports can include the background or transparency; SVG exports the static anchor pattern with current density/detail/color. Exports exclude all website UI.
+Select a demo, or upload/drop a supported local audio file. Play initiates analysis. Six sliders adjust node complexity, organic distortion, grain density, grain detail, flow speed and audio response. The pattern flows continuously before audio is loaded. A separate pause/resume button freezes the flow clock; audio playback remains separately controlled. The five PDF palette colors are selectable. Pointer/touch manipulation and double-click pulse act on the canvas. PNG exports can include the background or transparency; SVG exports a static snapshot of the current flow phase with current density/detail/color. Exports exclude all website UI.
 
 ## Products
 
@@ -34,10 +34,10 @@ All six pages are actual static HTML documents with direct URLs. Mobile navigati
 
 ## GSAP, Lenis and fine-grain rendering
 
-GSAP 3.15.0 with SplitText and ScrollTrigger drives the hero's staggered character rise, section-line reveals, story-text changes and small navigation/button feedback. The introductory headline settles in about one second. Content exists as readable HTML and is not gated behind a loading screen. Font readiness precedes splitting, splits are reverted on reduced-motion changes, and animations clean up on navigation.
+GSAP 3.15.0 with SplitText and ScrollTrigger drives the hero entrance, section-line reveals, story-text changes and small navigation/button feedback. The hero lettering then uses cached solid, outline, blur and grain layers in `typography.js` for a repeating material transition; it is not split into per-character DOM animations. Content exists as readable HTML and is not gated behind a loading screen. Font readiness precedes splitting, splits are reverted on reduced-motion changes, and animations clean up on navigation.
 
 Lenis 1.3.27 is driven by a single named GSAP ticker callback; `autoRaf` is false. Touch keeps native scrolling, anchors use the same scroll driver, dialogs retain native inner scrolling, and the library's reduced-motion handling is enabled. Browser-back restoration restarts the existing instance rather than creating a second driver.
 
-Hardware WebGL draws precomputed anchors with a small seeded grain atlas in one call. The Canvas fallback caches the dense background texture, stops scheduling when idle, and only redraws budgeted local grains near the pointer. Audio applies lightweight scale/position modulation to that cached field. Both renderers keep strong scatter/return, PNG export and the existing controls.
+Hardware WebGL draws precomputed anchors with a seeded grain atlas in one call and applies coherent two-axis flow in the vertex shader. The Canvas fallback caches the dense grain texture, warps it through two strip passes, and blends neighboring cached phase frames. Lab and homepage preview fields flow without audio; other Canvas fields stop scheduling when idle. Pointer scatter remains bounded. Both renderers retain audio modulation, export and all controls. Offscreen/hidden fields stop scheduling; reduced motion freezes the material.
 
-Validation covered 360, 390, 768 and 1440 px, complete archive/upload/export/collection workflows, anchors and story steps, reduced motion, real font loading and full headline bounds. On this test environment, concurrent audio analysis and pointer scatter measured roughly 16.7 ms median / 17.2 ms p95 frame intervals. Actual device performance may vary.
+Validation covered 360, 390, 768 and 1440 px, complete archive/upload/export/collection workflows, anchors and story steps, reduced motion, real font loading and full headline bounds. Current-flow checks additionally cover no-audio motion, stable pause, flow-speed control, animated font layers and a static reduced-motion fallback. On this software-rendered test environment, combined flow, audio and pointer scatter measured 16.6 ms median / 21.9 ms p95 frame intervals. Device performance varies.

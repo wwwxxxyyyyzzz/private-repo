@@ -30,7 +30,9 @@ Desktop uses hover, a large particle field and a side control rail. Mobile uses 
 
 ## Typography and texture polish
 
-Latin display type is now locally hosted Syne (400–800); Chinese display type is a locally subsetted Noto Serif SC variable font. The two WOFF2 files total about 320 KB and carry their SIL OFL notices in `dist/assets/fonts/`. Long Chinese interface copy retains readable system sans fallbacks. Main reading copy is 16 px; specimen metadata and bilingual captions preserve the supplied PDF's hierarchy. Homepage Latin lettering uses a separate fitted mobile size so the wide display face never clips.
+Latin display type is locally hosted Bricolage Grotesque, instantiated at optical size 96 and width 100 while retaining variable weight. Chinese display and interface type use locally subsetted Noto Sans SC. The active WOFF2 files total about 259 KB; OFL notices accompany them in `dist/assets/fonts/`. `resonant.css` defines the current type system after the earlier layout styles. Large, tightly tracked Latin letterforms and heavier Chinese headings keep the hierarchy coherent. Mobile headline sizes are fitted separately.
+
+The homepage lettering transitions continuously between solid ink, fine contours and granular mist. Each line has an offset phase; hovering creates a localized grain disturbance and audio adds material intensity. Cached raster layers preserve the recognizable letterforms throughout the transition. Native HTML remains accessible, and reduced motion displays the normal solid text.
 
 The existing black, green, teal, violet, pink and sand identity remains authoritative. Taste's pinned-poster direction (seed 347014857) guides refinement of the existing held narrative; the dealt Latin-only font pairing was adapted for the Chinese copy. Existing PDF specimen labels, numbering and thin rules remain intentional brand conventions. No replacement photographs or footage were introduced.
 

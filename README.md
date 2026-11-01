@@ -20,7 +20,7 @@ Checks JavaScript syntax, local module imports, HTML assets and links.
 
 - `index.html`: original homepage, interactive typography, particle dispersion, four-stage sticky narrative, archive and product previews.
 - `archive.html`: five species themes, category/search filters, detail dialogs, opt-in synthetic audio demos, seeking, volume, audio-reactive canvas, completed-listening impressions.
-- `lab.html`: built-in demos or local MP3/WAV/M4A uploads, Web Audio analysis (RMS, low/mid/high energy and spectral centroid), five live parameters, PDF palette, direct pointer/touch manipulation, fullscreen, PNG, transparent PNG, static SVG, saved impressions.
+- `lab.html`: built-in demos or local MP3/WAV/M4A uploads, Web Audio analysis (RMS, low/mid/high energy and spectral centroid), six live parameters including flow speed, continuously flowing material and pause/resume, PDF palette, direct pointer/touch manipulation, fullscreen, PNG, transparent PNG, static SVG, saved impressions.
 - `products.html`: the three PDF concept products, interactive function hotspots, subtle pointer parallax, cabin structure illustration, connected experience narrative.
 - `about.html`: brand story, design methodology, visual language and practical questions.
 - `collection.html`: browser-local sound impressions, restore parameters, download/delete, personal resonance map composition and PNG export.
@@ -45,8 +45,8 @@ Browser checks cover all six desktop and mobile pages, no horizontal overflow, d
 
 ## Visual and motion upgrade
 
-Locally hosted Syne and subset Noto Serif SC add a consistent display hierarchy. `polish.css` contains the type system and reading-size refinements. `motion.js` uses the vendored GSAP/SplitText/ScrollTrigger and Lenis files to coordinate one smooth-scroll clock, bounded intro/section text motion and reduced-motion cleanup. Native touch scrolling is preserved.
+Locally hosted Bricolage Grotesque and subset Noto Sans SC provide the current type hierarchy in `resonant.css`. `typography.js` cycles the homepage lettering between solid ink, contours and granular mist with cached layers. `motion.js` uses the vendored GSAP/SplitText/ScrollTrigger and Lenis files to coordinate one smooth-scroll clock, bounded intro/section text motion and reduced-motion cleanup. Native touch scrolling is preserved.
 
-The resonance renderer now uses a seeded micrograin atlas. Software rendering reuses a cached field and only draws local scatter, while hardware rendering samples the atlas in the existing point draw. Textured density replaces brute-force particle count growth.
+The resonance renderer now uses a seeded micrograin atlas. Software rendering reuses a cached field with blended two-axis flow frames and bounded local scatter, while hardware rendering deforms anchors in the existing point draw. Lab patterns flow even before audio is loaded and have separate speed/pause controls. Textured density replaces brute-force particle count growth.
 
 Vendor versions, sources and notices are recorded in `dist/vendor/`. Typeface OFL notices are in `dist/assets/fonts/`. React Bits Noise/SplitText provided implementation references; their behavior was adapted to the existing vanilla-JavaScript site without a React migration.

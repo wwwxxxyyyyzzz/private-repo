@@ -1,3 +1,4 @@
+import {FlowWarp,flowPoint} from './flow.js?v=6';
 export const motion = {
   dprLimit: 1.5, spacing: 1.65, maxPoints: 42000,
   radius: 185, scatter: 210, returnForce: .025, friction: .89,
@@ -13,13 +14,17 @@ uniform vec4 u_trails[4];
 uniform float u_opacity;
 uniform float u_reduced;
 uniform vec4 u_audio;
+uniform vec2 u_flow;
 uniform float u_detail;
 varying float v_seed;
 varying float v_alpha;
 void main() {
   vec2 anchor = a_particle.xy;
   float seed = a_particle.z;
-  vec2 centered=anchor-u_resolution*.5;
+  vec2 flowing=anchor;
+  flowing.x+=(sin(anchor.y/u_resolution.y*5.4+u_flow.x*.68)*.65+sin(anchor.y/u_resolution.y*10.1-u_flow.x*.39)*.35)*u_flow.y;
+  flowing.y+=(cos(flowing.x/u_resolution.x*4.8-u_flow.x*.61)*.65+sin(flowing.x/u_resolution.x*9.2+u_flow.x*.35)*.35)*u_flow.y;
+  vec2 centered=flowing-u_resolution*.5;
   vec2 p=centered*(1.0+u_audio.x*.10)+u_resolution*.5;
   p+=vec2(seed-.5,fract(seed*29.1)-.5)*u_drift*(1.0+u_audio.x*8.0+u_audio.y*3.0)*(1.0-u_reduced);
   p+=centered*(seed-.5)*u_audio.z*.07;
@@ -97,9 +102,10 @@ function hasHardwareGPU(){
 }
 
 export class ResonanceField {
-  constructor(canvas,{color,complexity=4.5,opacity=1,interactive=true}={}) {
+  constructor(canvas,{color,complexity=4.5,opacity=1,interactive=true,flow=false}={}) {
     this.canvas=canvas;this.color=color||getComputedStyle(document.documentElement).getPropertyValue('--particle').trim();
     this.complexity=complexity;this.opacity=opacity;this.phase=0;this.distortion=.65;this.density=1;this.detail=1;this.response=1;this.audio={rms:0,low:0,mid:0,high:0};this.audioLevel=0;
+    this.flowEnabled=flow;this.flowPaused=false;this.flowSpeed=.8;this.flowTime=0;this.textureVersion=0;this.warp=flow?new FlowWarp():null;
     this.pointer={x:-1000,y:-1000,down:false,active:false};
     this.strength=0;this.radius=motion.radius;this.trails=new Float32Array(16);
     this.textureDirty=true;this.lastTrail=0;this.trailIndex=0;this.visible=false;this.raf=0;this.lastFrame=0;
@@ -128,7 +134,7 @@ export class ResonanceField {
     if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));
     gl.deleteShader(vs);gl.deleteShader(fs);gl.useProgram(this.program);
     this.buffer=gl.createBuffer();this.uniforms={};
-    for(const n of ['resolution','dpr','drift','pointer','trails[0]','opacity','reduced','color','audio','detail','density','grain'])this.uniforms[n]=gl.getUniformLocation(this.program,'u_'+n);
+    for(const n of ['resolution','dpr','drift','pointer','trails[0]','opacity','reduced','color','audio','detail','density','grain','flow'])this.uniforms[n]=gl.getUniformLocation(this.program,'u_'+n);
     this.attribute=gl.getAttribLocation(this.program,'a_particle');
     this.grainTexture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,this.grainTexture);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,grainAtlas('#ffffff'));
@@ -166,14 +172,18 @@ export class ResonanceField {
   setAudio(metrics){this.audio=metrics;if(!this.raf&&this.visible)this.schedule();}
   setSettings(settings){
     let rebuild=false;
-    for(const key of ['complexity','distortion','density','detail','response'])if(Number.isFinite(settings[key])){
+    for(const key of ['complexity','distortion','density','detail','response','flowSpeed'])if(Number.isFinite(settings[key])){
       if((key==='complexity'||key==='distortion')&&this[key]!==settings[key])rebuild=true;
-      if(this[key]!==settings[key])this.textureDirty=true;this[key]=settings[key];
+      if(this[key]!==settings[key]&&['density','detail'].includes(key))this.textureDirty=true;this[key]=settings[key];
     }
+    if(Number.isFinite(settings.flowTime))this.flowTime=Math.max(0,settings.flowTime);
     if(rebuild){cancelAnimationFrame(this.rebuildFrame);this.rebuildFrame=requestAnimationFrame(()=>this.rebuild())}else this.draw();
   }
   setColor(color){this.color=color;this.rgb=null;this.atlas=null;this.textureDirty=true;this.draw();}
-  settings(){return {complexity:this.complexity,distortion:this.distortion,density:this.density,detail:this.detail,response:this.response,color:this.color,phase:this.phase};}
+  setFlowPaused(value){this.flowPaused=!!value;this.lastFrame=0;this.draw();this.schedule();}
+  flowAmount(){return this.flowEnabled&&!this.reduced.matches?Math.min(this.w,this.h)*.072*(.8+this.distortion*.4):0;}
+  mapPoint(x,y){return this.flowEnabled?flowPoint(x,y,this.w,this.h,this.flowTime,this.flowAmount()):[x,y];}
+  settings(){return {flowSpeed:this.flowSpeed,flowTime:this.flowTime,complexity:this.complexity,distortion:this.distortion,density:this.density,detail:this.detail,response:this.response,color:this.color,phase:this.phase};}
   pulse(e){this.move(e);this.pointer.down=true;clearTimeout(this.pulseTimer);this.pulseTimer=setTimeout(()=>this.leave(),350);}
   move(e){
     const r=this.canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
@@ -187,7 +197,7 @@ export class ResonanceField {
   schedule(){
     cancelAnimationFrame(this.raf);this.raf=0;
     if(!this.visible||document.hidden||this.reduced.matches||this.lost){this.lastFrame=0;return;}
-    if(!this.gl&&!this.textureDirty&&!this.pointer.active&&this.strength<.001&&this.audio.rms<.001&&this.audioLevel<.001){this.lastFrame=0;return;}
+    if(!this.gl&&!(this.flowEnabled&&!this.flowPaused)&&!this.textureDirty&&!this.pointer.active&&this.strength<.001&&this.audio.rms<.001&&this.audioLevel<.001){this.lastFrame=0;return;}
     this.raf=requestAnimationFrame(t=>{this.draw(t);this.schedule()});
   }
   buildTexture(){
@@ -200,7 +210,7 @@ export class ResonanceField {
     for(let i=0;i<p.length;i+=4){if(p[i+2]>this.density)continue;const size=this.clusterSize*(.85+p[i+2]*.3);
       c.drawImage(this.atlas,Math.floor(p[i+2]*7.999)*16,0,16,16,p[i]-size/2,p[i+1]-size/2,size,size);
     }
-    this.textureDirty=false;
+    this.textureDirty=false;this.textureVersion++;
   }
   draw(time=performance.now()){
     if(!this.w||this.lost)return;
@@ -209,6 +219,8 @@ export class ResonanceField {
     this.strength+=(target-this.strength)*(1-Math.exp(-dt*(target?13:3.2)));
     this.radius+=((this.pointer.down?235:motion.radius)-this.radius)*(1-Math.exp(-dt*10));
     const t=this.reduced.matches?0:time/1000;
+    if(this.flowEnabled&&!this.flowPaused&&!this.reduced.matches)this.flowTime+=dt*this.flowSpeed*(1+Math.min(.8,this.audio.low)*.4);
+    const flowClock=this.flowEnabled?this.flowTime:t;
     this.audioLevel+=(Math.min(1,this.audio.rms*5)*this.response-this.audioLevel)*(1-Math.exp(-dt*14));
     const level=this.audioLevel,low=this.audio.low*this.response,mid=this.audio.mid*this.response,high=this.audio.high*this.response;
     this.trailUniforms||=new Float32Array(16);
@@ -216,9 +228,9 @@ export class ResonanceField {
     if(this.gl){
       const gl=this.gl,u=this.uniforms;gl.viewport(0,0,this.canvas.width,this.canvas.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(this.program);
       gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.enableVertexAttribArray(this.attribute);gl.vertexAttribPointer(this.attribute,4,gl.FLOAT,false,16,0);
-      gl.uniform2f(u.resolution,this.w,this.h);gl.uniform1f(u.dpr,this.dpr);gl.uniform2f(u.drift,Math.sin(t*.28)*8,Math.cos(t*.23)*8);gl.uniform1f(u.opacity,this.opacity);gl.uniform1f(u.reduced,this.reduced.matches?1:0);
+      gl.uniform2f(u.resolution,this.w,this.h);gl.uniform1f(u.dpr,this.dpr);gl.uniform2f(u.drift,Math.sin(flowClock*.28)*8,Math.cos(flowClock*.23)*8);gl.uniform1f(u.opacity,this.opacity);gl.uniform1f(u.reduced,this.reduced.matches?1:0);
       gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.grainTexture);gl.uniform1i(u.grain,0);
-      gl.uniform4f(u.audio,level,low,mid,high);gl.uniform1f(u.detail,this.detail);gl.uniform1f(u.density,this.density);
+      gl.uniform2f(u.flow,this.flowTime,this.flowAmount());gl.uniform4f(u.audio,level,low,mid,high);gl.uniform1f(u.detail,this.detail);gl.uniform1f(u.density,this.density);
       gl.uniform4f(u.pointer,this.pointer.x,this.pointer.y,this.strength,this.radius);gl.uniform4fv(u['trails[0]'],this.trailUniforms);
       this.rgb||=colorRGB(this.color);gl.uniform3fv(u.color,this.rgb);gl.drawArrays(gl.POINTS,0,this.count);
     }else{
@@ -226,13 +238,16 @@ export class ResonanceField {
       if(this.textureDirty||!this.texture)this.buildTexture();
       const c=this.ctx,p=this.particles,scale=1+level*.10,dx=Math.sin(t*.7)*level*5,dy=Math.cos(t*.8)*level*5;
       c.clearRect(0,0,this.w,this.h);c.globalAlpha=this.opacity;c.save();
-      c.translate(this.w/2+dx,this.h/2+dy);c.scale(scale,scale);c.drawImage(this.texture,-this.w/2,-this.h/2,this.w,this.h);c.restore();
+      c.translate(this.w/2+dx,this.h/2+dy);c.scale(scale,scale);
+      if(this.flowEnabled&&!this.reduced.matches){this.warp.rate=8/Math.max(1,this.flowSpeed);this.warp.draw(c,this.texture,this.w,this.h,this.flowTime,this.flowAmount(),this.textureVersion)}else c.drawImage(this.texture,-this.w/2,-this.h/2,this.w,this.h);c.restore();
       if(this.strength>.001&&!this.reduced.matches){
-        const radius=this.radius*1.12,px=this.pointer.x,py=this.pointer.y;
+        const radius=this.radius*1.12,px=this.pointer.x,py=this.pointer.y,flowMargin=this.flowAmount()*2+50;
         const localChance=Math.min(1,750/Math.max(1,this.count*Math.min(1,Math.PI*radius*radius/(this.w*this.h))));
         const mask=c.createRadialGradient(px,py,0,px,py,radius);mask.addColorStop(0,'rgba(0,0,0,1)');mask.addColorStop(.48,'rgba(0,0,0,.98)');mask.addColorStop(1,'rgba(0,0,0,0)');
         c.globalCompositeOperation='destination-out';c.globalAlpha=Math.min(1,this.strength);c.fillStyle=mask;c.fillRect(px-radius,py-radius,radius*2,radius*2);c.globalCompositeOperation='source-over';c.globalAlpha=this.opacity*Math.min(1,this.strength);
-        for(let i=0;i<p.length;i+=4){if(p[i+2]>this.density)continue;let x=(p[i]-this.w/2)*scale+this.w/2+dx,y=(p[i+1]-this.h/2)*scale+this.h/2+dy;
+        for(let i=0;i<p.length;i+=4){if(p[i+2]>this.density)continue;
+          if(Math.abs(p[i]-px)>radius+flowMargin||Math.abs(p[i+1]-py)>radius+flowMargin)continue;
+          const mapped=this.mapPoint(p[i],p[i+1]);let x=(mapped[0]-this.w/2)*scale+this.w/2+dx,y=(mapped[1]-this.h/2)*scale+this.h/2+dy;
           const vx=x-px,vy=y-py,d2=vx*vx+vy*vy;if(d2>=radius*radius||d2<.01||((p[i+2]*41.129)%1)>localChance)continue;
           const d=Math.sqrt(d2),reach=1-d/radius,influence=reach*reach*this.strength,seed=p[i+2],push=influence*(145+seed*140);
           x+=vx/d*push+((seed*73.1)%1-.5)*influence*100;y+=vy/d*push+((seed*97.3)%1-.5)*influence*100;

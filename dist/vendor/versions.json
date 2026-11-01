@@ -1,9 +1,46 @@
 {
-  "gsap": {"version": "3.15.0", "source": "https://www.npmjs.com/package/gsap/v/3.15.0", "files": ["gsap.min.js", "ScrollTrigger.min.js", "SplitText.min.js"]},
-  "lenis": {"version": "1.3.27", "source": "https://www.npmjs.com/package/lenis/v/1.3.27", "files": ["lenis.mjs", "lenis.css"]},
+  "gsap": {
+    "version": "3.15.0",
+    "source": "https://www.npmjs.com/package/gsap/v/3.15.0",
+    "files": [
+      "gsap.min.js",
+      "ScrollTrigger.min.js",
+      "SplitText.min.js"
+    ]
+  },
+  "lenis": {
+    "version": "1.3.27",
+    "source": "https://www.npmjs.com/package/lenis/v/1.3.27",
+    "files": [
+      "lenis.mjs",
+      "lenis.css"
+    ]
+  },
   "fonts": [
-    {"family": "Syne", "source": "https://github.com/google/fonts/tree/main/ofl/syne", "local": "../assets/fonts/syne.woff2", "license": "SIL OFL 1.1"},
-    {"family": "Noto Serif SC", "source": "https://github.com/google/fonts/tree/main/ofl/notoserifsc", "local": "../assets/fonts/noto-serif-sc.woff2", "license": "SIL OFL 1.1", "subset": "website text"}
+    {
+      "family": "Bricolage Grotesque",
+      "cssFamily": "Bricolage Display",
+      "source": "https://github.com/google/fonts/tree/main/ofl/bricolagegrotesque",
+      "local": "../assets/fonts/bricolage-display.woff2",
+      "license": "SIL OFL 1.1",
+      "subset": "Latin; opsz=96, wdth=100; variable weight"
+    },
+    {
+      "family": "Noto Sans SC",
+      "source": "https://github.com/google/fonts/tree/main/ofl/notosanssc",
+      "local": "../assets/fonts/noto-sans-sc.woff2",
+      "license": "SIL OFL 1.1",
+      "subset": "website text; variable weight"
+    }
   ],
-  "references": {"react-bits": {"source": "https://github.com/DavidHDev/react-bits", "components": ["Noise", "SplitText"], "usage": "reference/adaptation for vanilla JS"}}
+  "references": {
+    "react-bits": {
+      "source": "https://github.com/DavidHDev/react-bits",
+      "components": [
+        "Noise",
+        "SplitText"
+      ],
+      "usage": "reference/adaptation for vanilla JS"
+    }
+  }
 }

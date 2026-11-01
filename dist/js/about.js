@@ -1,2 +1,2 @@
-import {installShell} from './ui.js?v=5';
+import {installShell} from './ui.js?v=6';
 installShell();
