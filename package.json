@@ -1,0 +1,6 @@
+{
+  "name": "rms-resonant-wild",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {"dev": "python3 -m http.server 5173 --directory dist", "check": "node --check dist/js/main.js && node --check dist/js/resonance.js"}
+}
