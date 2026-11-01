@@ -17,19 +17,19 @@
       radial-gradient(circle at 70% 48%,rgba(180,224,106,.055) 0 1px,transparent 1.5px) 0 0/9px 9px,
       radial-gradient(circle at 71% 47%,transparent 0 17%,rgba(180,224,106,.07) 17.2% 17.4%,transparent 17.6%),
       var(--bg);border:1px solid #151a13}
-    .stage:before,.stage:after{content:"";position:absolute;border:1px solid rgba(180,224,106,.17);border-radius:50%;width:46%;aspect-ratio:1;right:-7%;top:-29%;transform:rotate(-18deg)}
+    .stage:before,.stage:after{content:"";position:absolute;z-index:0;pointer-events:none;border:1px solid rgba(180,224,106,.17);border-radius:50%;width:46%;aspect-ratio:1;right:-7%;top:-29%;transform:rotate(-18deg)}
     .stage:after{width:31%;right:4%;top:54%;opacity:.55}
-    .top{position:absolute;left:3.5%;right:3.5%;top:4.2%;display:flex;align-items:center;justify-content:space-between;padding-bottom:2.1%;border-bottom:1px solid var(--line)}
+    .top{position:absolute;z-index:1;left:3.5%;right:3.5%;top:4.2%;display:flex;align-items:center;justify-content:space-between;padding-bottom:2.1%;border-bottom:1px solid var(--line)}
     .brand{display:flex;align-items:center;gap:1.1vw}.brand img{width:4.4vw;height:4.4vw;object-fit:contain}.brand strong{display:block;font-size:2vw;line-height:.8;letter-spacing:-.08em}.brand small{display:block;margin-top:.8vw;font-family:RMSCN,sans-serif;font-size:.68vw;letter-spacing:.3em}
     .meta{display:flex;gap:3.5vw;color:var(--muted);font-size:.68vw;letter-spacing:.08em;text-transform:uppercase}.meta span:last-child{color:var(--green)}
-    .copy{position:absolute;left:3.5%;top:26%;width:56%}
+    .copy{position:absolute;z-index:1;left:3.5%;top:26%;width:56%}
     .eyebrow{display:flex;align-items:center;gap:.8vw;color:var(--green);font-size:.8vw;letter-spacing:.08em}.eyebrow:before{content:"";width:.4vw;height:.4vw;border-radius:50%;background:var(--green);box-shadow:0 0 1vw rgba(180,224,106,.8)}
     h1{margin:4.1vw 0 2.2vw;font-size:7vw;line-height:.82;letter-spacing:-.075em;font-weight:800}h1 span{display:block;color:var(--green)}
     .zh{display:flex;align-items:center;gap:1.4vw;margin-top:3vw;font-family:RMSCN,sans-serif}.zh strong{font-size:1.9vw;letter-spacing:.25em}.zh i{display:block;width:4.5vw;height:1px;background:var(--muted)}.zh small{font-family:Syne,sans-serif;color:var(--muted);font-size:.66vw;line-height:1.6;letter-spacing:.06em}
-    .qr-wrap{position:absolute;right:4.5%;top:25%;width:28%;padding:1.3vw;background:var(--ink);color:var(--bg);box-shadow:0 1.5vw 5vw rgba(0,0,0,.35)}
-    .qr-wrap img{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated}
+    .qr-wrap{position:absolute;z-index:3;isolation:isolate;right:4.5%;top:25%;width:28%;padding:1.3vw;background:var(--ink);color:var(--bg);box-shadow:0 1.5vw 5vw rgba(0,0,0,.35)}
+    .qr-wrap img{display:block;width:100%;aspect-ratio:1;background:#fff;image-rendering:pixelated}
     .qr-copy{display:flex;justify-content:space-between;align-items:flex-end;gap:1vw;padding:.8vw .45vw .25vw}.qr-copy strong{font-family:RMSCN,sans-serif;font-size:1vw;letter-spacing:.08em}.qr-copy span{font-size:.58vw;line-height:1.45;text-align:right;color:#4b5047}
-    .bottom{position:absolute;left:3.5%;right:3.5%;bottom:3.7%;display:flex;justify-content:space-between;align-items:flex-end;padding-top:1.7%;border-top:1px solid var(--line);font-size:.64vw;color:var(--muted);letter-spacing:.05em}.url{color:var(--ink)}.number{font-size:1.7vw;color:var(--green);letter-spacing:-.04em}.number small{font-size:.62vw;color:var(--muted);letter-spacing:.06em}
+    .bottom{position:absolute;z-index:1;left:3.5%;right:3.5%;bottom:3.7%;display:flex;justify-content:space-between;align-items:flex-end;padding-top:1.7%;border-top:1px solid var(--line);font-size:.64vw;color:var(--muted);letter-spacing:.05em}.url{color:var(--ink)}.number{font-size:1.7vw;color:var(--green);letter-spacing:-.04em}.number small{font-size:.62vw;color:var(--muted);letter-spacing:.06em}
     @media(max-aspect-ratio:16/9){.stage{width:100vw;height:auto}}
     @media print{html,body{background:#fff}.stage{width:100vw;height:56.25vw;border:0}}
   </style>
