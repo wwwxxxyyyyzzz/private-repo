@@ -28,14 +28,17 @@ export async function installMotion(){
   let media;
   addEventListener('pagehide',e=>{gsap.ticker.remove(tick);if(e.persisted){lenis?.stop();return;}media?.revert();lenis?.destroy();lenis=null});
   addEventListener('pageshow',e=>{if(e.persisted&&lenis){lenis.start();gsap.ticker.add(tick);ScrollTrigger.refresh()}});
-  try{await Promise.all([document.fonts.load('700 16px "Bricolage Display"'),document.fonts.load('700 16px "Noto Sans SC"'),document.fonts.ready])}catch{/* Readable system fallbacks remain visible. */}
+  try{await Promise.all([document.fonts.load('800 16px Syne'),document.fonts.load('700 16px "Bricolage Display"'),document.fonts.load('700 16px "Noto Sans SC"'),document.fonts.ready])}catch{/* Readable system fallbacks remain visible. */}
 
   media=gsap.matchMedia();
   media.add('(prefers-reduced-motion: no-preference)',()=>{
     const splits=[],intro=gsap.timeline({defaults:{ease:'power3.out'}});
     const hero=document.querySelector('#hero-title');
     if(hero){
-      intro.from(hero,{y:12,autoAlpha:0,duration:.7,clearProps:'transform,opacity,visibility'},0);
+      for(const el of hero.querySelectorAll('.hero-line-head,.wild-text')){
+        const split=SplitText.create(el,{type:'chars',charsClass:'rms-char',aria:'auto'});splits.push(split);
+        intro.from(split.chars,{yPercent:70,autoAlpha:0,rotation:2,duration:.65,stagger:.022,clearProps:'transform,opacity,visibility'},el.classList.contains('wild-text') ? .1 : 0);
+      }
       intro.from('.hero-subtitle',{y:14,autoAlpha:0,duration:.5,clearProps:'transform,opacity,visibility'},.25)
         .from('.hero-description,.hero-copy>.primary-button',{y:12,autoAlpha:0,duration:.45,stagger:.07,clearProps:'transform,opacity,visibility'},.36);
     }

@@ -34,7 +34,7 @@ All six pages are actual static HTML documents with direct URLs. Mobile navigati
 
 ## GSAP, Lenis and fine-grain rendering
 
-GSAP 3.15.0 with SplitText and ScrollTrigger drives the hero entrance, section-line reveals, story-text changes and small navigation/button feedback. The hero lettering then uses cached solid, outline, blur and grain layers in `typography.js` for a repeating material transition; it is not split into per-character DOM animations. Content exists as readable HTML and is not gated behind a loading screen. Font readiness precedes splitting, splits are reverted on reduced-motion changes, and animations clean up on navigation.
+GSAP 3.15.0 with SplitText and ScrollTrigger drives the hero entrance, section-line reveals, story-text changes and small navigation/button feedback. The hero uses the original staggered character entrance and localized WILD pointer dispersion. Continuous glyph-material transitions are no longer enabled on the homepage. Content exists as readable HTML and is not gated behind a loading screen. Font readiness precedes splitting, splits are reverted on reduced-motion changes, and animations clean up on navigation.
 
 Lenis 1.3.27 is driven by a single named GSAP ticker callback; `autoRaf` is false. Touch keeps native scrolling, anchors use the same scroll driver, dialogs retain native inner scrolling, and the library's reduced-motion handling is enabled. Browser-back restoration restarts the existing instance rather than creating a second driver.
 

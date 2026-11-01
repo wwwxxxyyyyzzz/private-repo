@@ -1,19 +1,14 @@
-import {ResonantType} from './typography.js?v=6';
-import {scrollToPosition} from './motion.js?v=6';
-import {installShell,notify} from './ui.js?v=6';
-import {sound} from './audio.js?v=6';
+import {scrollToPosition} from './motion.js?v=7';
+import {installShell,notify} from './ui.js?v=7';
+import {sound} from './audio.js?v=7';
 installShell();
-import{ResonanceField}from'./resonance.js?v=6';
+import{ResonanceField,titleParticles}from'./resonance.js?v=7';
 const $=s=>document.querySelector(s);
 const rootStyle=getComputedStyle(document.documentElement);
 const hero=new ResonanceField($('#hero-field'),{complexity:3.8,opacity:.7});
 const storyField=new ResonanceField($('#story-field'),{color:rootStyle.getPropertyValue('--violet').trim(),complexity:5});
 const lab=new ResonanceField($('#lab-field'),{complexity:4.5,flow:true});
-const lettering=[];
-Promise.all([document.fonts.load('700 16px "Bricolage Display"'),document.fonts.ready]).then(()=>{
-  lettering.push(new ResonantType($('.hero-line-head'),{color:rootStyle.getPropertyValue('--text').trim(),phase:1.8}));
-  lettering.push(new ResonantType($('.wild-text'),{color:rootStyle.getPropertyValue('--accent').trim(),phase:-.5}));
-});
+titleParticles($('#title-particles'),$('#wild-word'));
 // The hero field is behind the photographic layer; relay coordinates from the scene.
 $('.hero').addEventListener('pointermove',e=>hero.move(e));
 $('.hero').addEventListener('pointerdown',e=>{hero.pointer.down=true;hero.move(e)});
@@ -27,4 +22,4 @@ $('#complexity').addEventListener('input',e=>lab.setComplexity(+e.target.value))
 $('#export-pattern').addEventListener('click',()=>{try{const a=document.createElement('a');a.download='RMS-resonance.png';a.href=lab.canvas.toDataURL('image/png');a.click();notify('声纹已导出为透明 PNG')}catch{notify('当前浏览器无法导出图片，请尝试其他浏览器')}});
 const species=[{id:'gibbon',name:'长臂猿 / Gibbon',image:'assets/gibbon.webp',description:'林冠之间，猿类以声音彼此呼应。RMS 以这份自然的交流为灵感，探索声音与有机视觉形态之间的连接。'},{id:'warbler',name:'柳莺 / Warbler',image:'assets/warbler.webp',description:'小小的身影隐于枝叶，细微鸣声让森林的层次变得可被感知。从一次驻足开始，重新关注身边的自然声景。'},{id:'pheasant',name:'孔雀雉 / Peacock-pheasant',image:'assets/pheasant.webp',description:'细密的羽纹与层叠的眼斑，呈现出自然独特的视觉秩序。在声音与形态之间，寻找感知生命的新方式。'}];
 const dialog=$('#species-dialog');for(const b of document.querySelectorAll('[data-species]'))b.addEventListener('click',()=>{const s=species[+b.dataset.species];$('#dialog-title').textContent=s.name;$('#dialog-image').src=s.image;$('#dialog-image').alt=s.name;$('#dialog-description').textContent=s.description;$('#dialog-resonance').href='lab.html?sound='+s.id;dialog.showModal()});$('.dialog-close').addEventListener('click',()=>dialog.close());$('#dialog-resonance').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
-sound.addEventListener('metrics',()=>{hero.setAudio(sound.metrics);lab.setAudio(sound.metrics);lettering.forEach(type=>type.setAudio(sound.metrics.rms))});
+sound.addEventListener('metrics',()=>{hero.setAudio(sound.metrics);lab.setAudio(sound.metrics)});

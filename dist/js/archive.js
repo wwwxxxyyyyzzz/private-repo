@@ -1,10 +1,10 @@
-import {revealElement} from './motion.js?v=6';
-import {species,getSpecies} from './data.js?v=6';
-import {sound,timeLabel} from './audio.js?v=6';
-import {installShell,notify} from './ui.js?v=6';
-import {ResonanceField} from './resonance.js?v=6';
-import {saveImpression} from './store.js?v=6';
-import {patternSnapshot} from './export.js?v=6';
+import {revealElement} from './motion.js?v=7';
+import {species,getSpecies} from './data.js?v=7';
+import {sound,timeLabel} from './audio.js?v=7';
+import {installShell,notify} from './ui.js?v=7';
+import {ResonanceField} from './resonance.js?v=7';
+import {saveImpression} from './store.js?v=7';
+import {patternSnapshot} from './export.js?v=7';
 installShell();
 const $=s=>document.querySelector(s),grid=$('#archive-grid');
 const field=new ResonanceField($('#archive-field'),{complexity:3.8});

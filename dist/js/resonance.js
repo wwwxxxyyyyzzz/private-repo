@@ -1,4 +1,4 @@
-import {FlowWarp,flowPoint} from './flow.js?v=6';
+import {FlowWarp,flowPoint} from './flow.js?v=7';
 export const motion = {
   dprLimit: 1.5, spacing: 1.65, maxPoints: 42000,
   radius: 185, scatter: 210, returnForce: .025, friction: .89,

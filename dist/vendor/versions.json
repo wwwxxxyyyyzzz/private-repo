@@ -31,6 +31,13 @@
       "local": "../assets/fonts/noto-sans-sc.woff2",
       "license": "SIL OFL 1.1",
       "subset": "website text; variable weight"
+    },
+    {
+      "family": "Syne",
+      "source": "https://github.com/google/fonts/tree/main/ofl/syne",
+      "local": "../assets/fonts/syne.woff2",
+      "license": "SIL OFL 1.1",
+      "usage": "Restored homepage headline"
     }
   ],
   "references": {

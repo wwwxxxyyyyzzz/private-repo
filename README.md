@@ -45,7 +45,7 @@ Browser checks cover all six desktop and mobile pages, no horizontal overflow, d
 
 ## Visual and motion upgrade
 
-Locally hosted Bricolage Grotesque and subset Noto Sans SC provide the current type hierarchy in `resonant.css`. `typography.js` cycles the homepage lettering between solid ink, contours and granular mist with cached layers. `motion.js` uses the vendored GSAP/SplitText/ScrollTrigger and Lenis files to coordinate one smooth-scroll clock, bounded intro/section text motion and reduced-motion cleanup. Native touch scrolling is preserved.
+Locally hosted Bricolage Grotesque and subset Noto Sans SC provide the current type hierarchy in `resonant.css`. The homepage headline retains its earlier Syne font, responsive sizing and pointer dispersion. `motion.js` uses the vendored GSAP/SplitText/ScrollTrigger and Lenis files to coordinate one smooth-scroll clock, bounded intro/section text motion and reduced-motion cleanup. Native touch scrolling is preserved.
 
 The resonance renderer now uses a seeded micrograin atlas. Software rendering reuses a cached field with blended two-axis flow frames and bounded local scatter, while hardware rendering deforms anchors in the existing point draw. Lab patterns flow even before audio is loaded and have separate speed/pause controls. Textured density replaces brute-force particle count growth.
 
