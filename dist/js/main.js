@@ -1,4 +1,4 @@
-import{ResonanceField,titleParticles}from'./resonance.js';
+import{ResonanceField,titleParticles}from'./resonance.js?v=3';
 const $=s=>document.querySelector(s);
 const rootStyle=getComputedStyle(document.documentElement);
 const hero=new ResonanceField($('#hero-field'),{complexity:3.8,opacity:.7});
@@ -6,8 +6,10 @@ const storyField=new ResonanceField($('#story-field'),{color:rootStyle.getProper
 const lab=new ResonanceField($('#lab-field'),{complexity:4.5});
 titleParticles($('#title-particles'),$('#wild-word'));
 // The hero field is behind the photographic layer; relay coordinates from the scene.
-$('.hero').addEventListener('pointermove',e=>{const r=hero.canvas.getBoundingClientRect();hero.pointer.x=e.clientX-r.left;hero.pointer.y=e.clientY-r.top});
-$('.hero').addEventListener('pointerleave',()=>hero.pointer.x=hero.pointer.y=-1000);
+$('.hero').addEventListener('pointermove',e=>hero.move(e));
+$('.hero').addEventListener('pointerdown',e=>{hero.pointer.down=true;hero.move(e)});
+$('.hero').addEventListener('pointerup',()=>{hero.pointer.down=false});
+$('.hero').addEventListener('pointerleave',()=>hero.leave());
 const menu=$('.menu-toggle'),nav=$('.nav');menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',open);menu.setAttribute('aria-label',open?'收起导航':'展开导航');nav.classList.toggle('open',open)});
 for(const a of nav.querySelectorAll('a'))a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','展开导航')});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.focus()}});
 const sectionObserver=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){for(const a of nav.querySelectorAll('a')){const active=a.hash==='#'+e.target.id;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')}}},{rootMargin:'-15% 0px -55% 0px'});for(const s of document.querySelectorAll('#home,#archive,#resonance,#products,#about'))sectionObserver.observe(s);
