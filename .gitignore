@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# This buildless website keeps its deployable source in dist.
+!dist/
+!dist/**

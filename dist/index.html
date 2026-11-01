@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b09">
+  <meta name="description" content="共振野境 RMS：以声音为媒介，探索雨林生命的共鸣。从听见到看见，一场自然与生成艺术的相遇。">
+  <title>共振野境 RMS — Hear the Wild</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">跳至主要内容</a>
+<header class="header">
+  <a class="brand" href="#home" aria-label="共振野境 RMS 首页"><span class="brand-mark" aria-hidden="true"><img src="assets/mark.webp" alt=""></span><span>RMS<span class="brand-zh">共振野境</span></span></a>
+  <nav class="nav" id="navigation" aria-label="主要导航">
+    <a class="active" href="#home">首页<span>HOME</span></a><a href="#archive">声音档案<span>SOUND ARCHIVE</span></a><a href="#resonance">声纹体验<span>RESONANCE</span></a><a href="#products">品牌产品<span>PRODUCTS</span></a><a href="#about">关于 RMS<span>ABOUT</span></a>
+  </nav>
+  <div class="header-actions"><span class="locale">中文 <span>/ EN</span></span><button class="sound-toggle" aria-label="开启合成环境音演示" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sound-label">声音关闭</span></button><button class="menu-toggle" aria-controls="navigation" aria-expanded="false" aria-label="展开导航"><span></span><span></span></button></div>
+</header>
+<main id="main">
+  <section id="home" class="hero" aria-labelledby="hero-title">
+    <div class="hero-top"><span><i class="status-dot"></i> NATURE IS NEVER SILENT</span><span>HAINAN · CHINA &nbsp; / &nbsp; 18° N</span></div>
+    <div class="hero-visual" aria-hidden="true"><canvas id="hero-field"></canvas><img class="hero-animal" src="assets/hero-gibbon.webp" alt="" fetchpriority="high"><div class="visual-cross cross-one">+</div><div class="visual-cross cross-two">+</div><div class="specimen-label"><span>01 / FOREST VOICES</span><span>雨林的声音，从未停止。</span></div></div>
+    <div class="hero-copy"><div class="eyebrow"><span class="tiny-line"></span> 声音 · 生命 · 共振</div><h1 id="hero-title">HEAR THE<br><span id="wild-word">WILD<span class="title-dot">.</span><canvas id="title-particles" aria-hidden="true"></canvas></span></h1><div class="hero-subtitle"><span>共振野境</span><span class="subtitle-line"></span><span class="subtitle-en">RESONANT<br>MORPHIC SYMPHONY</span></div><p class="hero-description">让看不见的声音，成为可感知的自然。<br>在每一次共振中，重新遇见雨林里的生命。</p><a class="primary-button" href="#story">进入声音的世界 <span>↗</span></a></div>
+    <div class="hero-bottom"><a class="scroll-link" href="#story"><span class="mini-wave" aria-hidden="true">∿</span> 向下探索 <span class="muted">SCROLL TO RESONATE</span><span>↓</span></a><span class="hero-note">以数学构建节点，以声音驱动形态。<br><span>PHYSICS → SOUND → DATA → FORM</span></span><span class="hero-number">01 <span>/ 04</span></span></div>
+  </section>
+  <div class="ticker" aria-hidden="true"><div>HEAR THE WILD <span>✳</span> FEEL THE RESONANCE <span>✳</span> 从听见到看见 <span>✳</span> NATURE RESONATES WITH US <span>✳</span> HEAR THE WILD <span>✳</span> FEEL THE RESONANCE <span>✳</span></div></div>
+  <section id="story" class="story" aria-label="从声音到形态的四段叙事">
+    <div class="story-sticky">
+      <div class="section-meta"><span>01 / THE INVISIBLE SOUNDSCAPE</span><span>一段声音的旅程</span></div>
+      <div class="story-grid"><div class="story-art"><img src="assets/gibbon.webp" alt="林间张口的黑色长臂猿" loading="lazy"><canvas id="story-field" aria-hidden="true"></canvas><span class="art-caption">FIELD NOTES / HAINAN RAINFOREST</span></div><div class="story-text"><span class="eyebrow" id="story-kicker">A — SILENCE / 静默</span><h2 id="story-title">森林从不安静。<br><em>只是我们，尚未听见。</em></h2><p id="story-description">枝叶之间，生命以声音彼此回应。那些不易被看见的鸣叫，构成了雨林最真实的日常。</p><div class="story-steps" aria-label="叙事阶段"><button data-stage="0" class="selected">01<span>静默</span></button><button data-stage="1">02<span>聆听</span></button><button data-stage="2">03<span>转译</span></button><button data-stage="3">04<span>共振</span></button></div></div></div>
+    </div>
+  </section>
+  <section id="archive" class="archive section-pad">
+    <div class="section-meta"><span>02 / SOUND ARCHIVE</span><span>雨林声音档案</span></div>
+    <div class="section-heading"><h2>每一种生命，<br>都有自己的<span>频率。</span></h2><p>循着声音，认识雨林里的它们。<br>让一次凝视，成为重新聆听的开始。</p></div>
+    <div class="species-grid">
+      <button class="species" data-species="0"><div class="species-image"><img src="assets/gibbon.webp" alt="长臂猿摄影" loading="lazy"><span class="species-index">01</span><span class="species-arrow">↗</span><span class="hover-pattern" aria-hidden="true"></span></div><div class="species-caption"><h3>长臂猿<span>GIBBON</span></h3><span class="species-tag">林冠之声</span></div></button>
+      <button class="species" data-species="1"><div class="species-image"><img src="assets/warbler.webp" alt="枝头小型鸟类的近景" loading="lazy"><span class="species-index">02</span><span class="species-arrow">↗</span><span class="hover-pattern" aria-hidden="true"></span></div><div class="species-caption"><h3>柳莺<span>WARBLER</span></h3><span class="species-tag">枝间轻鸣</span></div></button>
+      <button class="species" data-species="2"><div class="species-image"><img src="assets/pheasant.webp" alt="孔雀雉展开带眼斑的羽屏" loading="lazy"><span class="species-index">03</span><span class="species-arrow">↗</span><span class="hover-pattern" aria-hidden="true"></span></div><div class="species-caption"><h3>孔雀雉<span>PEACOCK-PHEASANT</span></h3><span class="species-tag">林下回响</span></div></button>
+    </div><div class="archive-foot"><span>聆听，是理解自然的开始。</span><span>THE RAINFOREST, ONE VOICE AT A TIME.</span></div>
+  </section>
+  <section id="resonance" class="resonance section-pad"><div class="section-meta"><span>03 / RESONANCE EXPERIENCE</span><span>触碰声音的形状</span></div><div class="resonance-layout"><div class="lab-copy"><span class="eyebrow">SOUND BECOMES FORM</span><h2>声音无形。<br>共振<span>有迹。</span></h2><p>移动、轻触或拖动画面，<br>让节点聚合，让纹样生长。<br>在指尖与声纹之间，感受一次自然的共鸣。</p><label class="range-label" for="complexity">节点复杂度 <span>COMPLEXITY</span></label><input id="complexity" type="range" min="2" max="8" step="0.1" value="4.5"><button class="text-button" id="reset-pattern">重新共振 <span>↻</span></button><small>克拉尼原理启发的生成式纹样 · 可触摸交互</small></div><div class="lab-art"><canvas id="lab-field" aria-label="可交互的有机粒子声纹，移动或拖动指针可扰动图形" role="img"></canvas><div class="lab-corner">RMS / GENERATIVE FIELD</div><button class="export-button" id="export-pattern" aria-label="保存声纹为 PNG 图片">保存声纹 ↗</button><span class="lab-hint">MOVE TO RESONATE &nbsp; · &nbsp; 触碰以共振</span></div></div></section>
+  <section id="products" class="products section-pad"><div class="section-meta"><span>04 / BEYOND THE SOUND</span><span>让共振，走进生活</span></div><div class="product-head"><h2>把一段雨林，<br><em>带回日常。</em></h2><p>从林间的沉浸式聆听，到掌心的声音记忆。<br>让自然的回响，在每一次相遇中延续。</p></div><div class="product-grid"><figure><img src="assets/cabin.webp" alt="竹木结构的雨林声栖小屋设计效果图" loading="lazy"><figcaption><span>01 / 雨林声栖小屋</span><span>RAINFOREST SOUND CABIN</span></figcaption></figure><figure><img src="assets/posts.webp" alt="森林步道旁的共声木桩设计效果图" loading="lazy"><figcaption><span>02 / 共声木桩</span><span>SOUND POST SYSTEM</span></figcaption></figure><figure><img src="assets/chest.webp" alt="木质雨林音匣设计效果图" loading="lazy"><figcaption><span>03 / 雨林音匣</span><span>FOREST SOUND CHEST</span></figcaption></figure></div></section>
+  <footer id="about"><div class="footer-top"><img src="assets/mark.webp" alt="RMS 同心圆字母标志" loading="lazy"><div><span class="eyebrow">RESONANT MORPHIC SYMPHONY</span><h2>自然与我们，<em>同频。</em></h2><p>以自然为声，以设计为媒。共振野境 RMS 探索声音、视觉与情感之间的连接，<br>让雨林的声音被记录、被看见、被理解，也被带进生活。</p></div><a href="#home" class="back-top" aria-label="返回顶部">↑</a></div><div class="footer-bottom"><span>© 2026 共振野境 RMS</span><span>HEAR → RESONATE → VISUALIZE → COLLECT</span><span>NATURE RESONATES WITH US.</span></div></footer>
+</main>
+<dialog id="species-dialog"><button class="dialog-close" aria-label="关闭物种介绍">×</button><div class="dialog-content"><img id="dialog-image" alt=""><div><span class="eyebrow">RAINFOREST FIELD NOTES</span><h2 id="dialog-title"></h2><p id="dialog-description"></p><a class="primary-button" id="dialog-resonance" href="#resonance">探索它的共振 <span>↗</span></a></div></div></dialog>
+<div class="toast" role="status" aria-live="polite"></div>
+</body></html>
