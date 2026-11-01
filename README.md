@@ -25,6 +25,7 @@ Checks JavaScript syntax, local module imports, HTML assets and links.
 - `about.html`: brand story, design methodology, visual language and practical questions.
 - `collection.html`: browser-local sound impressions, restore parameters, download/delete, personal resonance map composition and PNG export.
 - `share.html`: 16:9 public-access QR presentation page for classroom display and submission.
+- `download-single.html`: downloads the self-contained `.html` submission file for DingTalk or other file-sharing services.
 
 ## Implementation
 
