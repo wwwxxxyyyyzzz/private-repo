@@ -11,4 +11,5 @@ h2,.page-intro h1,.about-hero h1,.lab-intro h1,.product-chapter h2,.product-stru
 @media(prefers-reduced-motion:reduce){.resonant-ink-canvas{display:none!important}.resonant-type-ready{-webkit-text-fill-color:currentColor!important;color:inherit!important}.wild-text.resonant-type-ready{color:var(--accent)!important}.resonant-type-ready .title-dot{color:var(--accent)!important;-webkit-text-fill-color:currentColor!important}.resonant-heading{transition:none}.resonant-heading:hover{-webkit-text-stroke:0}.resonant-heading:hover .rms-line,.resonant-heading:hover em{color:revert}}
 
 /* Restore the original homepage headline while retaining the current site typography. */
-.hero h1{font-family:Syne,'Helvetica Neue',Arial,sans-serif}
+.hero h1{font-family:Syne,'Helvetica Neue',Arial,sans-serif;font-size:clamp(64px,7.8vw,128px)}
+@media(max-width:760px){.hero h1{font-size:14.5vw}.hero-line-head{font-size:9vw}}

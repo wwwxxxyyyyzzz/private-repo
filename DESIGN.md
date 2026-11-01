@@ -32,7 +32,7 @@ Desktop uses hover, a large particle field and a side control rail. Mobile uses 
 
 Latin display type is locally hosted Bricolage Grotesque, instantiated at optical size 96 and width 100 while retaining variable weight. Chinese display and interface type use locally subsetted Noto Sans SC. The active WOFF2 files total about 259 KB; OFL notices accompany them in `dist/assets/fonts/`. `resonant.css` defines the current type system after the earlier layout styles. Large, tightly tracked Latin letterforms and heavier Chinese headings keep the hierarchy coherent. Mobile headline sizes are fitted separately.
 
-The homepage “HEAR THE WILD” headline is restored to its earlier Syne 800 font, original responsive sizing and solid treatment, with the original localized pointer dispersion on WILD. The newer solid/contour/mist lettering is no longer initialized. Other site typography and flowing lab patterns remain current.
+The homepage “HEAR THE WILD” headline is restored to its earlier Syne 800 font, a smaller responsive scale (about 25% smaller on desktop and 12–15% smaller on mobile) and solid treatment, with the original localized pointer dispersion on WILD. The newer solid/contour/mist lettering is no longer initialized. Other site typography and flowing lab patterns remain current.
 
 The existing black, green, teal, violet, pink and sand identity remains authoritative. Taste's pinned-poster direction (seed 347014857) guides refinement of the existing held narrative; the dealt Latin-only font pairing was adapted for the Chinese copy. Existing PDF specimen labels, numbering and thin rules remain intentional brand conventions. No replacement photographs or footage were introduced.
 
