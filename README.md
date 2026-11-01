@@ -24,6 +24,7 @@ Checks JavaScript syntax, local module imports, HTML assets and links.
 - `products.html`: the three PDF concept products, interactive function hotspots, subtle pointer parallax, cabin structure illustration, connected experience narrative.
 - `about.html`: brand story, design methodology, visual language and practical questions.
 - `collection.html`: browser-local sound impressions, restore parameters, download/delete, personal resonance map composition and PNG export.
+- `share.html`: 16:9 public-access QR presentation page for classroom display and submission.
 
 ## Implementation
 
